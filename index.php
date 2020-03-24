@@ -1,15 +1,17 @@
 <?php
 
 require_once 'vendor/autoload.php';
-
+//use Gnomejodas\Modelos\Person;
 use Spatie\Docker\DockerContainer;
 use Spatie\Docker\DockerContainerInstance;
 
+//$manolo = new Person("Juan","Martinez","2018-12-05");
 
 if (isset($_POST['iniciar'])){
 
 $containerInstance = DockerContainer::create("gnomejodas/lopz:1.0","lopz")
     ->daemonize()
+//    ->doNotCleanUpAfterExit()
     ->mapPort("80", "80")
     ->start();
 exit($containerInstance->getDockerIdentifier());
@@ -72,6 +74,8 @@ and open the template in the editor.
 
 
             }
+            
+            
 
 
 
@@ -83,7 +87,6 @@ and open the template in the editor.
         
         echo "<button onclick=arrancar(this); >Arrancar</button>";
         echo "<button onclick=detener(this); >detener</button>";
-
 
         ?>
     </body>

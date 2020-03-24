@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d62854f69056e084774b4bc7613351b8",
+    "content-hash": "eee39ce44b28fca301b4f6ecfa1f8d3d",
     "packages": [
         {
             "name": "spatie/macroable",
