@@ -46,7 +46,7 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title></title>
-        <script src="./jquery-3.4.1.min.js"></script>
+        <script src="./lib/jss/jquery-3.4.1.min.js"></script>
         <script>
             var id = "";
             function arrancar(boton){

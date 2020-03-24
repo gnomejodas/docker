@@ -13,6 +13,11 @@
             "email": "leonardolopezpaque@gmail.com",
             "homepage": "https://github.com/gnomejodas/docker",
             "role": "Developer"
+        },
+        {
+            "name": "Antonio José Rodríguez Segura",
+            "email": "anrodse@hotmail.com",
+            "role": "Collaborator"
         }
     ],
     "require": {
