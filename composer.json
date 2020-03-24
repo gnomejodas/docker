@@ -1,23 +1,17 @@
 {
-    "name": "spatie/docker",
-    "description": "Run a docker container in your PHPUnit tests",
+    "name": "gnomejodas/docker",
+    "description": "PHP based web app for quickly deploying services",
     "keywords": [
-        "spatie",
+        "gnomejodas",
         "docker"
     ],
-    "homepage": "https://github.com/spatie/docker",
+    "homepage": "https://github.com/gnomejodas/docker",
     "license": "MIT",
     "authors": [
         {
-            "name": "Ruben Van Assche",
-            "email": "ruben@spatie.be",
-            "homepage": "https://spatie.be",
-            "role": "Developer"
-        },
-        {
-            "name": "Freek Van der Herten",
-            "email": "freek@spatie.be",
-            "homepage": "https://spatie.be",
+            "name": "Leonardo López Paqué",
+            "email": "leonardolopezpaque@gmail.com",
+            "homepage": "https://github.com/gnomejodas/docker",
             "role": "Developer"
         }
     ],
