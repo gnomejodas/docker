@@ -1,37 +1,19 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+<!DOCTYPE html>
 
-var id = "";
-function arrancar(boton){
-
-     $.post( "index.php?site=dhcp", 
-                            { iniciar: "1" },
-                            function( data ) {
-                               //alert(data);
-                               id =  data;
-//                               alert(id);
-                            }
-                            );
-
-}
-
-function detener(boton){
-//    alert(id);
-     $.post( "index.php?site=dhcp", 
-                            { detener: "1", id: id },
-                            function( data ) {
-//                            alert(data);
-
-                            }
-                            );
-
-
-
-}
-
+<html>
+    <head>
+        <title>Calculadora</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            
+            .ip{
+                
+                max-width: 40px;
+            }
+            
+        </style>
+        <script>
             
 //            Todas las funciones van a aceptar solamente valores en binario salvo la última
             function dectobin(dec){
@@ -85,7 +67,7 @@ function detener(boton){
             }
             
             
-            function validarDHCP(formulario){
+            function check(formulario){
                
 //               Convertimos todos los campos del formulario a Binario
                 var red =  (dectobin(formulario.net1.value)).toString() + 
@@ -142,3 +124,35 @@ function detener(boton){
             }
             
             
+        </script>
+    </head>
+    <body>
+        
+        <form method="POST" onsubmit="return check(this);">
+            
+            Red<br>
+            <input type="number" class="ip" min="0" max="255" name="net1"/>
+            <input type="number" class="ip" min="0" max="255" name="net2"/>
+            <input type="number" class="ip" min="0" max="255" name="net3"/>
+            <input type="number" class="ip" min="0" max="255" name="net4"/>
+            <br>
+            
+            Mascara <br>
+            <input class="ip" min="1" max="24" type="number" name="m1"/><br>
+            
+            IP inicio<br>
+            <input class="ip" min="0" max="255" type="number" name="n1"/>
+            <input class="ip" min="0" max="255" type="number" name="n2"/>
+            <input class="ip" min="0" max="255" type="number" name="n3"/>
+            <input class="ip" min="0" max="255" type="number" name="n4"/><br>
+            IP Fin<br>
+            <input class="ip" min="0" max="255" type="number" name="f1"/>
+            <input class="ip" min="0" max="255" type="number" name="f2"/>
+            <input class="ip" min="0" max="255" type="number" name="f3"/>
+            <input class="ip" min="0" max="255" type="number" name="f4"/>
+            <br><br>
+            
+            <input type="submit" value="Iniciar DHCP"/>
+        </form>
+    </body>
+</html>
