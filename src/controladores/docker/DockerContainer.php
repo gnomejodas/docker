@@ -24,6 +24,14 @@ class DockerContainer
     public bool $cleanUpAfterExit = true;
 
     public bool $stopOnDestruct = false;
+    
+    public string $network = '';
+    
+    public bool $init = false;
+    
+    public string $volumeHost = '';
+    
+    public string $volumeContainer = '';
 
     public function __construct(string $image, string $name = '')
     {
@@ -85,7 +93,37 @@ class DockerContainer
 
         return $this;
     }
-
+    
+    public function network(string $network): self
+    {
+        
+        $this->network = $network;
+        
+        return $this;
+        
+    }
+    
+    
+    public function init(bool $init): self
+    {
+        
+        $this->init = $init;
+        
+        return $this;
+        
+    }
+    
+        public function volume(string $hostFolder, string $containerFolder): self
+    {
+        
+        $this->volumeHost = $hostFolder;
+        
+        $this->volumeContainer = $containerFolder;
+        
+        return $this;
+        
+    }
+    
     public function stopOnDestruct(bool $stopOnDestruct = true): self
     {
         $this->stopOnDestruct = $stopOnDestruct;
@@ -129,6 +167,20 @@ class DockerContainer
 
         if ($this->name !== '') {
             $extraOptions[] = "--name {$this->name}";
+        }
+        
+        if ($this->network !== ''){
+            $extraOptions[] = "--net {$this->network}";
+        }
+        
+        if ($this->volumeHost !== '' && $this->volumeContainer !== ''){
+            
+            $extraOptions[] = "-t -d -v {$this->volumeHost}:{$this->volumeContainer}";
+        }
+        
+        if ($this->init){
+            
+            $extraOptions[] = '--init';
         }
 
         if ($this->daemonize) {

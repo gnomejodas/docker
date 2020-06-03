@@ -3,3 +3,30 @@
 
     max-width: 40px;
 }
+.formulario {
+    width: 30%;
+    float:left; /* add this */
+    border: 1px solid red;
+    display:table;
+}
+form{
+   display: table-cell;
+   text-align: center;
+   vertical-align: middle;
+}
+.controles {
+    width: 18%;
+    border: 1px solid green;
+    float: left; /* add this */
+    text-align: center;
+}
+.datos{
+    width: 50%;
+    border: 1px solid green;
+    float: left; /* add this */
+    
+}
+.controles button{
+    
+    display:block;
+}
