@@ -52,13 +52,6 @@ function getCurrentNetworks($info="todo"){
             
         }
         
-//        $redBin = ip2long($ip) & bindec($mascarabinario);
-//        $redBin = str_pad(decbin($redBin),32,"0",STR_PAD_RIGHT);
-//        $redBin = base_convert($redBin, 2, 10);
-//        $redDec = bindec($redBin);
-//        $redDec = str_pad(base_convert(ip2long($ip), 10, 2),32,0,STR_PAD_LEFT) & $mascarabinario;
-//        $redFinal= long2ip($redBin);
-        
         $ipbinLista[] = $redBin;
         $redDec =long2ip(bindec($redBin));
         
@@ -86,9 +79,69 @@ function getCurrentNetworks($info="todo"){
        
 }
 
+function checkDhcpConf(){
+    
+//    $datosDHCP = [];
+    
+    if(file_exists('./datos/dhcpd.conf')){
+
+    $configuracionDhcp = Process::fromShellCommandline("head -6 ./datos/dhcpd.conf | cut -d '#' -f 2");
+    $configuracionDhcp->run();
+    $configuracionDhcp = $configuracionDhcp->getOutput();
+    
+    $datosDHCP = explode("\n", $configuracionDhcp);
+
+//    $instalacion=1;
+    }
+    else{
+
+        $datosDHCP[] = "No existe ningún DHCP configurado";
+
+    }
+    
+    return $datosDHCP;
+    
+}
+
+function getCurrentContainers($imagen = "Up"){
+    
+$process = Process::fromShellCommandline("docker ps | grep $imagen |  cut -d ' ' -f 1");
+$process->run();
+return $process->getOutput();
+}
+
+if(isset($_POST['pedirConfiguracion'])){
+    
+    $arrayenPHP = [];
+    $configuracion= checkDhcpConf();
+    if (getCurrentContainers("dhcpd")){
+        
+        $estado = "<tr><td style='text-align:center;color:green'>". "DHCP ACTIVO". '</td> </tr>';
+    }
+    else if (!getCurrentContainers("dhcpd")){
+        
+        $estado = "<tr><td style='text-align:center;color:red'>". "DHCP NO ACTIVO". '</td> </tr>';
+    }
+    
+    $respuesta = [$configuracion,$estado];
+    
+    exit(json_encode($respuesta));
+    
+}
+
+
+
 if (isset($_POST['pedirRedes'])){
     
-    $arrayenPHP = getCurrentNetworks();
+    $arrayenPHP = [];
+    $redesServidor= getCurrentNetworks("ipdec");
+    $mascaras = getCurrentNetworks("mask");
+    $contador = 0;
+    foreach ($redesServidor as $value){
+        
+        $arrayenPHP[] = [$value,$mascaras[$contador]];
+        $contador++;
+    }
     
     exit(json_encode($arrayenPHP));
     
@@ -113,7 +166,7 @@ exit($containerInstance->getDockerIdentifier());
 if (isset($_POST['detener'])){
 
 $container = new DockerContainer("networkboot/dhcpd","dhcpd");
-$containerInstance = new DockerContainerInstance($container,$_POST['id'],"dhcpd");
+$containerInstance = new DockerContainerInstance($container,$_POST["id"],"dhcpd");
 $containerInstance->stop();
 
 exit($containerInstance->getDockerIdentifier());
@@ -128,7 +181,14 @@ if (isset($_POST['nuevoDHCP'])){
 //    if (filter_var($_POST['red'],FILTER_VALIDATE_IP)){
     
         $fileConfig=fopen("./datos/dhcpd.conf", "w");
-
+            
+            fwrite($fileConfig, "#Red ".$_POST['red']."\n");
+            fwrite($fileConfig, "#Máscara ".$_POST['mask'] ."\n");
+            fwrite($fileConfig, "#Ip de Inicio ".$_POST['inicio'] ."\n");
+            fwrite($fileConfig, "#Ip Final ".$_POST['fin']. "\n");
+            fwrite($fileConfig, "#Gateway ".$_POST['gateway']. "\n");
+            fwrite($fileConfig, "#Servidor DNS ".$_POST['dns']. "\n");
+            
             fwrite($fileConfig, 'subnet '. $_POST['red'] .' netmask '. $_POST['mascara'] . " {" ."\n");
             fwrite($fileConfig, 'option routers '. $_POST['gateway'] .';'."\n");
             fwrite($fileConfig, 'option domain-name-servers ' . $_POST['dns'] . ';'."\n");
@@ -136,7 +196,15 @@ if (isset($_POST['nuevoDHCP'])){
             fwrite($fileConfig, '}');
         fclose($fileConfig);
         
-        exit("ok");
+        if(file_exists('./datos/dhcpd.conf')){
+            
+            exit("Fichero de configuración creado con éxito");
+        }
+        else{
+            exit("Error en la creación del fichero de configuración, revise los permisos");
+        }
+        
+        
         
 //    }
 //    else {
@@ -170,12 +238,12 @@ and open the template in the editor.
         require_once './src/vistas/nav.php';
         ?>
 
+        <div class ="todo">
 
-         
         <div class="formulario">
             <form method="POST" onsubmit="return validarDHCP(this);">
 
-                <h3>Datos del DHCP</h3>
+                <h3>Datos del Nuevo DHCP</h3>
 
                 Red<br>
                 <input type="number" class="ip" min="0" max="255" name="net1"/>
@@ -216,13 +284,13 @@ and open the template in the editor.
                 <input type="submit" name="startDHCP" value="Crear nuevo DHCP"/>
             </form>
         </div>
-
+<!--
         <div class="controles" >
         <button onclick="arrancar(this)"; >Arrancar</button>
         <button onclick="detener(this)"; >detener</button>
         <button onclick="pedirContainers()">Pedir Lista Contenedores</button>
         <button onclick="pedirRedes()">Pedir Lista Redes</button>
-        </div>
+        </div>-->
         
         <div class="datos">
         <table>
@@ -230,7 +298,7 @@ and open the template in the editor.
                 <tr>
                     <th colspan="2">
                         <h3>
-                            Lista de Redes para habilitar DHCP
+                            Lista de Redes para <br>habilitar DHCP
                         </h3>
                     </th>
                 </tr>
@@ -264,12 +332,74 @@ and open the template in the editor.
             </tbody>
         </table>
             
-            
         <button onclick="pedirRedes()">Actualizar Redes</button>
             
+        </div>
+
+         <div class="controles">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        <h3>
+                            Configuración DHCP Actual
+                        </h3>
+                    </th>
+                </tr>
+                
+<!--                <tr>
+                    <th>
+                        Red
+                    </th>
+                    <th>
+                        Máscara
+                    </th>
+                </tr>-->
+            </thead>
+            <tbody id="dhcpdata">
+                <?php
+                    $datosDhcp = checkDhcpConf();
+                    $containerArrancado = getCurrentContainers("dhcpd");
+                    foreach ($datosDhcp as $value){
+                                                
+                        echo '<tr>';
+                        echo "<td>". $value. '</td>';
+                        echo '</tr>';
+                                                
+                    }
+                    if($containerArrancado){
+                        
+                        echo '<tr>';
+                        echo "<td style='text-align:center;color:green'>". "DHCP ACTIVO". '</td>';
+                        echo '</tr>';
+                    }
+                    else if (!$containerArrancado){
+                        
+                        echo '<tr>';
+                        echo "<td style='text-align:center;color:red'>". "DHCP NO ACTIVO". '</td>';
+                        echo '</tr>';
+                    }
+                
+                ?>
+            </tbody>
+        </table>
             
+        <button onclick="pedirConfiguracion()">Comprobar </button>
+        <button onclick="arrancar(this)"; >Arrancar</button>
+        <button onclick="detener(this)"; >Detener</button>
             
         </div>
+
+        </div>
+        
+        <?php
+////                var_dump($datosDHCP);
+//            foreach ($datosDHCP as $value){
+//                
+//                echo  $value . "<br>";
+//                }
+//        
+//        ?>
         
     </body>
 </html>

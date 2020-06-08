@@ -4,5 +4,3 @@
 # authoring-byte-order entry is generated, DO NOT DELETE
 authoring-byte-order little-endian;
 
-server-duid "\000\001\000\001&h\316\372\012\000'\000\000\000";
-

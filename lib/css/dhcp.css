@@ -1,32 +1,62 @@
-
 .ip{
 
     max-width: 40px;
 }
+
+.todo{
+    position:relative;
+}
 .formulario {
-    width: 30%;
-    float:left; /* add this */
+    /*width: 30%;*/
+    overflow:scroll;
+    height:450px;
+    float:left;
     border: 1px solid red;
     display:table;
+    
+    position:absolute; left: 0px; width: 33.3%;
 }
 form{
+   height:inherit;
    display: table-cell;
    text-align: center;
    vertical-align: middle;
 }
-.controles {
-    width: 18%;
-    border: 1px solid green;
-    float: left; /* add this */
-    text-align: center;
-}
 .datos{
-    width: 50%;
+
+    overflow: scroll;
+    height:450px;
+    /*width: 30%;*/
     border: 1px solid green;
-    float: left; /* add this */
+    float: left;
+    position:absolute; left: 33.3%; width: 33.3%;
     
+}
+table{
+    margin-right:auto;
+    margin-left:auto;
+}
+.datos button{
+    display: block;
+    margin:0 auto;
 }
 .controles button{
     
-    display:block;
+    /*display:block;*/
+}
+.controles{
+    overflow: scroll;
+    height:450px;
+    /*width: 30%;*/
+    border: 1px solid green;
+    float: left;
+    position:absolute; left: 66.6%; width: 33.3%;
+    
+}
+.controles button {
+    
+    display: block;
+    margin: 0 auto;    
+    margin-top: 15px;
+    
 }
