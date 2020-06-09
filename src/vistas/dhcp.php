@@ -224,11 +224,11 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>Control de DHCP</title>
         <script src="./lib/jss/jquery-3.4.1.min.js"></script>
         <script src="./lib/jss/dhcp.js"></script>
+        <link rel="stylesheet" type="text/css" href="./lib/css/fondo.css">
         
-        <!--<script src="myscripts.js"></script>-->
         <link rel="stylesheet" type="text/css" href="./lib/css/dhcp.css">
 
     </head>

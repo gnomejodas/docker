@@ -8,3 +8,12 @@ and open the template in the editor.
     Author     : leo
 */
 
+body{
+    
+    background-image: url("./indexbg.png");
+    /*background-color: green;*/
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center; 
+    background-size: cover;
+}
