@@ -9,9 +9,9 @@ and open the template in the editor.
 */
 
 body{
-    
+    /*Copyright de la imagen: https://miro.medium.com/max/4096/1*LZyOSxtb_D6uCjkeuBg1fg.png*/
     background-image: url("./indexbg.png");
-    /*background-color: green;*/
+    
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center; 
